@@ -4,51 +4,126 @@ let ctx = cnv.getContext("2d");
 cnv.width = 500;
 cnv.height = 500;
 
-document.addEventListener("click",onPress);
-
-function onPress(event){
-        let xy = [event.clientX, event.clientY]
-        xy = griddy.pressIndex(xy)
-        console.log(xy)
-         }
-
 
 class grid {
-    constructor(size, canvasSize) {
+    constructor(size) {
         this.size = size
-        this.canvasSize = canvasSize
+        this.rows = []
+        this.columns = []
+        this.boxSize = 500/this.size
     }
-    pressIndex(coords){
-        let x = Math.floor(coords[0]/(this.canvasSize/this.size))
-        let y = Math.floor(coords[1]/(this.canvasSize/this.size))
-        let xy = [x,y]
-        return xy
+    array() {
+        for (let i = 0; i<this.size; i++) {
+            this.columns.push(i)
+            this.rows.push(this.columns)
+        } 
+        console.log(this.rows)  
     }
-    displayDefault() {
-        for (let i = 0; i < this.size; i++) {
-            let gridspacing = this.canvasSize/this.size
-            ctx.beginPath();
-            ctx.moveTo(i * gridspacing, 0);
-            ctx.lineTo(i * gridspacing, cnv.height);
-            ctx.stroke();
-    
-            ctx.beginPath();
-            ctx.moveTo(0, i * gridspacing);
-            ctx.lineTo(cnv.width, i*gridspacing);
-            ctx.stroke();
+    drawboxes() {
+        for (let i = 0; i < this.rows.length; i++) {
+            for (let j = 0; j<this.rows.length; j++) {
+                ctx.fillStyle = '#C8E0E8'
+                ctx.fillRect(this.columns[i] * this.boxSize + 5, this.columns[j] * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+                
+            }
         }
+        console.log(this.size)
     }
-    displayRanBox() {
-        ctx.fillStyle = 'black'
-        ctx.fillRect(this.canvasSize/this.size * coords[0],this.canvasSize/this.size * coords[1],this.canvasSize/this.size,this.canvasSize/this.size)
+    onPress(event) {
+        let xpos, ypos;
+        let x = cnv.offsetLeft
+        let y = cnv.offsetTop
+        xpos = event.clientX - x + 250
+        ypos = event.clientY - y + 250
+    if (xpos < 0 || xpos > 500 || ypos < 0 ||ypos>500 ) {
+        console.log('cmon man')
+    } else {
+        console.log(Math.floor(xpos/(500/this.size)) + 1, Math.floor(ypos/(500/this.size)) + 1)
+    }
+    
+    ctx.fillStyle = 'black'
+    ctx.fillRect((Math.floor(xpos/(500/this.size))) * this.boxSize + 5,  (Math.floor(ypos/(500/this.size))) * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+    }
+    ranBox() {
+
     }
 }
 
-let griddy = new grid(5, cnv.width)
 
-griddy.displayDefault()
 
-griddy.displayRanBox()
+
+let griddy = new grid(5)
+document.addEventListener('click', (e) => griddy.onPress(e)); 
+griddy.array()
+griddy.drawboxes()
+
+
+
+
+
+
+
+// console.log(rows[1][1])
+// function arrayloop(num) {
+//     let g = []
+//     for (i = 0; i<num; i++) {
+//         g.push(i)
+//     }
+//     console.log(g)
+// }
+
+// arrayloop(5)
+
+
+
+
+
+
+// document.addEventListener("click",onPress);
+
+// function onPress(event){
+//         let xy = [event.clientX, event.clientY]
+//         xy = griddy.pressIndex(xy)
+//         console.log(xy)
+//          }
+
+
+// class grid {
+//     constructor(size, canvasSize) {
+//         this.size = size
+//         this.canvasSize = canvasSize
+//     }
+//     pressIndex(coords){
+//         let x = Math.floor(coords[0]/(this.canvasSize/this.size))
+//         let y = Math.floor(coords[1]/(this.canvasSize/this.size)-1)
+//         let xy = [x,y]
+//         return xy
+//     }
+//     displayDefault() {
+//         for (let i = 0; i < this.size; i++) {
+//             let gridspacing = this.canvasSize/this.size
+//             ctx.beginPath();
+//             ctx.moveTo(i * gridspacing, 0);
+//             ctx.lineTo(i * gridspacing, cnv.height);
+//             ctx.stroke();
+    
+//             ctx.beginPath();
+//             ctx.moveTo(0, i * gridspacing);
+//             ctx.lineTo(cnv.width, i*gridspacing);
+//             ctx.stroke();
+//         }
+//     }
+//     displayRanBox(coords) {
+//         ctx.fillStyle = 'black'
+//         ctx.fillRect(this.canvasSize/this.size * coords[0],this.canvasSize/this.size * coords[1],this.canvasSize/this.size,this.canvasSize/this.size)
+//     }
+// }
+
+// let griddy = new grid(4, cnv.width)
+
+// griddy.displayDefault()
+
+// griddy.displayRanBox()
 
 
 
