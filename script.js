@@ -6,11 +6,12 @@ cnv.height = 500;
 
 
 class grid {
-    constructor(size) {
+    constructor(size, difficulty) {
         this.size = size
         this.rows = []
         this.columns = []
         this.boxSize = 500/this.size
+        this.difficulty = difficulty
     }
     array() {
         for (let i = 0; i<this.size; i++) {
@@ -45,17 +46,46 @@ class grid {
     ctx.fillRect((Math.floor(xpos/(500/this.size))) * this.boxSize + 5,  (Math.floor(ypos/(500/this.size))) * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
     }
     ranBox() {
+        let repeatDetection = []
+        let i = 0
+        let checked = true
+        // for (let i = 0; i < this.difficulty; i++) {
+        //     let ranRow = Math.floor(Math.random()*this.size)
+        //     let ranColumnDepth = Math.floor(Math.random()*this.size)
+        //     repeatDetection.push(ranRow,ranColumnDepth)
 
+        // ctx.fillStyle = 'black'
+        // ctx.fillRect(ranRow * this.boxSize + 5, ranColumnDepth * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+        // console.log(ranRow, ranColumnDepth)
+        // }
+        // while (i < this.difficulty) {
+        //     let ranRow = Math.floor(Math.random()*this.size)
+        //     let ranColumnDepth = Math.floor(Math.random()*this.size)
+        //     for (let j = 0; j <= repeatDetection.length; j++) {
+        //         if (repeatDetection[j] !== ranRow,ranColumnDepth) {
+        //             checked = false;
+        //             repeatDetection.push(ranRow,ranColumnDepth)
+        //         }
+        //     }
+
+        //     if (checked === true) {
+        //         ctx.fillStyle = 'black'
+        //     ctx.fillRect(ranRow * this.boxSize + 5, ranColumnDepth * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+        //     }
+        //     i++
+        // }
+        
     }
 }
 
 
 
 
-let griddy = new grid(5)
+let griddy = new grid(5, 25)
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
 griddy.drawboxes()
+griddy.ranBox()
 
 
 
