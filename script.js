@@ -12,6 +12,8 @@ class grid {
         this.columns = []
         this.boxSize = 500/this.size
         this.difficulty = difficulty
+        this.repeatDetection = []
+        this.repeat;
     }
     array() {
         for (let i = 0; i<this.size; i++) {
@@ -45,43 +47,43 @@ class grid {
     ctx.fillStyle = 'black'
     ctx.fillRect((Math.floor(xpos/(500/this.size))) * this.boxSize + 5,  (Math.floor(ypos/(500/this.size))) * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
     }
+    checkRepeat(x,y) {
+        this.repeat = false
+            for (let j = 0; j < this.repeatDetection.length; j++) {
+                if (this.repeatDetection[j][0] === x && this.repeatDetection[j][1] === y) {
+                 this.repeat = true
+                 break;
+                }
+            }
+    }
     ranBox() {
-        let repeatDetection = []
         let i = 0
-        let checked = true
-        // for (let i = 0; i < this.difficulty; i++) {
-        //     let ranRow = Math.floor(Math.random()*this.size)
-        //     let ranColumnDepth = Math.floor(Math.random()*this.size)
-        //     repeatDetection.push(ranRow,ranColumnDepth)
+        while (i < this.difficulty) {
+            // New Coordinates to Try
+            let x = Math.floor(Math.random()*this.size)
+            let y = Math.floor(Math.random()*this.size)
+            
+            // Test if New Coordinates have been used
+            this.checkRepeat(x,y)
 
-        // ctx.fillStyle = 'black'
-        // ctx.fillRect(ranRow * this.boxSize + 5, ranColumnDepth * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
-        // console.log(ranRow, ranColumnDepth)
-        // }
-        // while (i < this.difficulty) {
-        //     let ranRow = Math.floor(Math.random()*this.size)
-        //     let ranColumnDepth = Math.floor(Math.random()*this.size)
-        //     for (let j = 0; j <= repeatDetection.length; j++) {
-        //         if (repeatDetection[j] !== ranRow,ranColumnDepth) {
-        //             checked = false;
-        //             repeatDetection.push(ranRow,ranColumnDepth)
-        //         }
-        //     }
-
-        //     if (checked === true) {
-        //         ctx.fillStyle = 'black'
-        //     ctx.fillRect(ranRow * this.boxSize + 5, ranColumnDepth * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
-        //     }
-        //     i++
-        // }
-        
+            // Check for Repetition
+            if (this.repeat === false) {
+                ctx.fillStyle = 'black'
+                ctx.fillRect(x * this.boxSize + 5, y * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+                this.repeatDetection.push([x,y])
+                i++
+            } 
+        }
+        setTimeout(function () {
+            ctx.clearRect(0, 0, cnv.width, cnv.height)
+        }, 1000)
     }
 }
 
 
 
 
-let griddy = new grid(5, 25)
+let griddy = new grid(5, 5)
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
 griddy.drawboxes()
