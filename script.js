@@ -1,3 +1,4 @@
+let levelNum = document.getElementById('lvlnum');
 let cnv = document.getElementById('canvas');
 let ctx = cnv.getContext("2d");
 
@@ -18,15 +19,39 @@ class grid {
         this.yCoord
         this.correctNum = 0
         this.wrongNum = 0
+        this.level = 1
+        this.clickable = false
+    }
+    levelUp() {
+        if (this.correctNum === this.coords.length) {
+            this.correctNum = 0
+            this.wrongNum = 0
+            this.coords = []
+            this.level++
+            this.difficulty++
+            // this.size++
+            this.clickable = false
+                // this.array()
+                this.drawboxes()
+                this.ranBox()
+        } 
+        if (this.wrongNum >= 3) {
+            this.level = 1
+        }
+        // if (this.difficulty === this.size - 2) {
+        //     this.size++
+        // }
+        
     }
     array() {
         for (let i = 0; i<this.size; i++) {
             this.columns.push(i)
             this.rows.push(this.columns)
-        } 
+        }
         
     }
     drawboxes() {
+        ctx.clearRect(0,0,cnv.width, cnv.height);
         for (let i = 0; i < this.rows.length; i++) {
             for (let j = 0; j<this.rows.length; j++) {
                 ctx.fillStyle = '#C8E0E8'
@@ -37,22 +62,16 @@ class grid {
         
     }
     onPress(event) {
+        if(this.clickable === false) return
         let xpos, ypos;
         let x = cnv.offsetLeft
         let y = cnv.offsetTop
         xpos = event.clientX - x + 250
         ypos = event.clientY - y + 250
-    // if (xpos < 0 || xpos > 500 || ypos < 0 ||ypos>500 ) {
-    //     console.log('cmon man')
-    // } else {
-    //     console.log(Math.floor(xpos/(500/this.size)) + 1, Math.floor(ypos/(500/this.size)) + 1)
-    // }
 
     this.xCoord= Math.floor(xpos/(500/this.size)) + 1
     this.yCoord= Math.floor(ypos/(500/this.size)) + 1
     
-    
-
     this.correctBox();
     }
     checkRepeat(x,y) {
@@ -83,11 +102,12 @@ class grid {
             } 
         }
         setTimeout(() => {
+            this.clickable = true
             this.drawboxes()
           }, 1000)
+          levelNum.innerHTML = this.level
     }
     correctBox() {
-        // if (() => griddy.onPress())
         let correct = false
         for (let i = 0; i < this.coords.length; i++) {
             if (this.coords[i][0] === this.xCoord - 1 && this.coords[i][1] === this.yCoord - 1) {
@@ -104,30 +124,17 @@ class grid {
             ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
             this.wrongNum++
         }
-
-        if (this.correctNum === this.coords.length) {
-            
-                this.drawboxes()
-                this.ranBox()
-            
-            this.correctNum = 0
-            this.wrongNum = 0
-            this.coords = []
-
-        }
-        console.log(this.correctNum)
-        
-        
+        this.levelUp();
     }
 }
 
-
-
-let griddy = new grid(5, 5)
+let griddy = new grid(8, 3)
+// griddy.levelUp()
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
 griddy.drawboxes()
 griddy.ranBox()
+
 
 
 

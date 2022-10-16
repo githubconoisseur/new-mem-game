@@ -5,3 +5,9 @@ canvas {
         left: 50%;
         transform: translate(-50%, -50%);
 }
+h1 {
+    position: absolute;
+    top: 15%;
+    right: 55%;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
