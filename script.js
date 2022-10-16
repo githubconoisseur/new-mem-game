@@ -12,15 +12,19 @@ class grid {
         this.columns = []
         this.boxSize = 500/this.size
         this.difficulty = difficulty
-        this.repeatDetection = []
+        this.coords = []
         this.repeat;
+        this.xCoord
+        this.yCoord
+        this.correctNum = 0
+        this.wrongNum = 0
     }
     array() {
         for (let i = 0; i<this.size; i++) {
             this.columns.push(i)
             this.rows.push(this.columns)
         } 
-        console.log(this.rows)  
+        
     }
     drawboxes() {
         for (let i = 0; i < this.rows.length; i++) {
@@ -30,7 +34,7 @@ class grid {
                 
             }
         }
-        console.log(this.size)
+        
     }
     onPress(event) {
         let xpos, ypos;
@@ -38,19 +42,23 @@ class grid {
         let y = cnv.offsetTop
         xpos = event.clientX - x + 250
         ypos = event.clientY - y + 250
-    if (xpos < 0 || xpos > 500 || ypos < 0 ||ypos>500 ) {
-        console.log('cmon man')
-    } else {
-        console.log(Math.floor(xpos/(500/this.size)) + 1, Math.floor(ypos/(500/this.size)) + 1)
-    }
+    // if (xpos < 0 || xpos > 500 || ypos < 0 ||ypos>500 ) {
+    //     console.log('cmon man')
+    // } else {
+    //     console.log(Math.floor(xpos/(500/this.size)) + 1, Math.floor(ypos/(500/this.size)) + 1)
+    // }
+
+    this.xCoord= Math.floor(xpos/(500/this.size)) + 1
+    this.yCoord= Math.floor(ypos/(500/this.size)) + 1
     
-    ctx.fillStyle = 'black'
-    ctx.fillRect((Math.floor(xpos/(500/this.size))) * this.boxSize + 5,  (Math.floor(ypos/(500/this.size))) * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+    
+
+    this.correctBox();
     }
     checkRepeat(x,y) {
         this.repeat = false
-            for (let j = 0; j < this.repeatDetection.length; j++) {
-                if (this.repeatDetection[j][0] === x && this.repeatDetection[j][1] === y) {
+            for (let j = 0; j < this.coords.length; j++) {
+                if (this.coords[j][0] === x && this.coords[j][1] === y) {
                  this.repeat = true
                  break;
                 }
@@ -70,16 +78,48 @@ class grid {
             if (this.repeat === false) {
                 ctx.fillStyle = 'black'
                 ctx.fillRect(x * this.boxSize + 5, y * this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
-                this.repeatDetection.push([x,y])
+                this.coords.push([x,y])
                 i++
             } 
         }
-        setTimeout(function () {
-            ctx.clearRect(0, 0, cnv.width, cnv.height)
-        }, 1000)
+        setTimeout(() => {
+            this.drawboxes()
+          }, 1000)
+    }
+    correctBox() {
+        // if (() => griddy.onPress())
+        let correct = false
+        for (let i = 0; i < this.coords.length; i++) {
+            if (this.coords[i][0] === this.xCoord - 1 && this.coords[i][1] === this.yCoord - 1) {
+                correct = true
+                break;
+            } 
+        }
+        if (correct === true) {
+            ctx.fillStyle = 'green'
+            ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+            this.correctNum++
+        } else {
+            ctx.fillStyle = 'red'
+            ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+            this.wrongNum++
+        }
+
+        if (this.correctNum === this.coords.length) {
+            
+                this.drawboxes()
+                this.ranBox()
+            
+            this.correctNum = 0
+            this.wrongNum = 0
+            this.coords = []
+
+        }
+        console.log(this.correctNum)
+        
+        
     }
 }
-
 
 
 
@@ -88,6 +128,7 @@ document.addEventListener('click', (e) => griddy.onPress(e));
 griddy.array()
 griddy.drawboxes()
 griddy.ranBox()
+
 
 
 
