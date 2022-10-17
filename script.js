@@ -21,6 +21,7 @@ class grid {
         this.wrongNum = 0
         this.level = 1
         this.clickable = false
+        this.correctClicked = []
     }
     levelUp() {
         if (this.correctNum === this.coords.length) {
@@ -29,9 +30,9 @@ class grid {
             this.coords = []
             this.level++
             this.difficulty++
-            // this.size++
+            this.size++
             this.clickable = false
-                // this.array()
+                this.array()
                 this.drawboxes()
                 this.ranBox()
         } 
@@ -109,26 +110,39 @@ class grid {
     }
     correctBox() {
         let correct = false
+        let alrClicked = false
         for (let i = 0; i < this.coords.length; i++) {
             if (this.coords[i][0] === this.xCoord - 1 && this.coords[i][1] === this.yCoord - 1) {
                 correct = true
                 break;
             } 
         }
-        if (correct === true) {
+        for (let j = 0; j<this.correctClicked; j++) {
+            if (this.correctClicked[i][0] === this.xCoord && this.correctClicked[i][1] === this.yCoord) {
+                alrClicked = true;
+                break;
+            }
+        }
+        if (correct === true && alrClicked === false) {
             ctx.fillStyle = 'green'
             ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
+            this.correctClicked.push([this.xCoord,this.yCoord])
             this.correctNum++
+            console.log('hi')
+            console.log(this.correctNum)
+            console.log(alrClicked)
+        } else if (correct === true && alrClicked !== false) {
+            console.log('bye')
         } else {
             ctx.fillStyle = 'red'
             ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
             this.wrongNum++
         }
-        this.levelUp();
+        
     }
 }
 
-let griddy = new grid(8, 3)
+let griddy = new grid(5, 3)
 // griddy.levelUp()
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
