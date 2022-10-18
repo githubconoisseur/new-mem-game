@@ -28,28 +28,32 @@ class grid {
             this.correctNum = 0
             this.wrongNum = 0
             this.coords = []
+            this.correctClicked = []
             this.level++
             this.difficulty++
-            this.size++
             this.clickable = false
-                this.array()
                 this.drawboxes()
                 this.ranBox()
         } 
         if (this.wrongNum >= 3) {
             this.level = 1
+            this.difficulty = 3
+            this.correctNum = 0
+            this.wrongNum = 0
+            this.coords = []
+            this.correctClicked = []
+            this.level++
+            this.difficulty++
+            this.clickable = false
+                this.drawboxes()
+                this.ranBox()
         }
-        // if (this.difficulty === this.size - 2) {
-        //     this.size++
-        // }
-        
     }
     array() {
         for (let i = 0; i<this.size; i++) {
             this.columns.push(i)
             this.rows.push(this.columns)
-        }
-        
+        }   
     }
     drawboxes() {
         ctx.clearRect(0,0,cnv.width, cnv.height);
@@ -117,8 +121,8 @@ class grid {
                 break;
             } 
         }
-        for (let j = 0; j<this.correctClicked; j++) {
-            if (this.correctClicked[i][0] === this.xCoord && this.correctClicked[i][1] === this.yCoord) {
+        for (let j = 0; j<this.correctClicked.length; j++) {
+            if (this.correctClicked[j][0] === this.xCoord && this.correctClicked[j][1] === this.yCoord) {
                 alrClicked = true;
                 break;
             }
@@ -128,9 +132,7 @@ class grid {
             ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
             this.correctClicked.push([this.xCoord,this.yCoord])
             this.correctNum++
-            console.log('hi')
-            console.log(this.correctNum)
-            console.log(alrClicked)
+            this.levelUp();
         } else if (correct === true && alrClicked !== false) {
             console.log('bye')
         } else {
@@ -138,11 +140,10 @@ class grid {
             ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
             this.wrongNum++
         }
-        
     }
 }
 
-let griddy = new grid(5, 3)
+let griddy = new grid(5 , 3)
 // griddy.levelUp()
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
