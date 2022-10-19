@@ -1,6 +1,20 @@
 let levelNum = document.getElementById('lvlnum');
 let cnv = document.getElementById('canvas');
 let ctx = cnv.getContext("2d");
+let accordion = document.getElementsByClassName("accordion");
+
+for (let i = 0; i < accordion.length; i++) {
+    accordion[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
+  
 
 cnv.width = 500;
 cnv.height = 500;
@@ -14,7 +28,7 @@ class grid {
         this.boxSize = 500/this.size
         this.difficulty = difficulty
         this.coords = []
-        this.repeat;
+        this.repeat
         this.xCoord
         this.yCoord
         this.correctNum = 0
@@ -22,6 +36,7 @@ class grid {
         this.level = 1
         this.clickable = false
         this.correctClicked = []
+        this.outsideClick = false
     }
     levelUp() {
         if (this.correctNum === this.coords.length) {
@@ -36,14 +51,13 @@ class grid {
                 this.ranBox()
         } 
         if (this.wrongNum >= 3) {
+            alert('you lost :(  click ok to restart')
             this.level = 1
             this.difficulty = 3
             this.correctNum = 0
             this.wrongNum = 0
             this.coords = []
             this.correctClicked = []
-            this.level++
-            this.difficulty++
             this.clickable = false
                 this.drawboxes()
                 this.ranBox()
@@ -73,6 +87,12 @@ class grid {
         let y = cnv.offsetTop
         xpos = event.clientX - x + 250
         ypos = event.clientY - y + 250
+
+        if (xpos < 0 || xpos > 500 || ypos < 0 ||ypos>500 ) {
+            this.outsideClick = true
+            console.log('cmon man') } else {
+                this.outsideClick = false
+            }
 
     this.xCoord= Math.floor(xpos/(500/this.size)) + 1
     this.yCoord= Math.floor(ypos/(500/this.size)) + 1
@@ -135,15 +155,16 @@ class grid {
             this.levelUp();
         } else if (correct === true && alrClicked !== false) {
             console.log('bye')
-        } else {
+        } else if (this.outsideClick !== true) {
             ctx.fillStyle = 'red'
             ctx.fillRect((this.xCoord - 1) * this.boxSize + 5,  (this.yCoord - 1)* this.boxSize + 5, this.boxSize - 10, this.boxSize - 10)
             this.wrongNum++
+            this.levelUp();
         }
     }
 }
 
-let griddy = new grid(5 , 3)
+let griddy = new grid(7 , 3)
 // griddy.levelUp()
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
