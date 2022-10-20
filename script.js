@@ -6,7 +6,7 @@ let accordion = document.getElementsByClassName("accordion");
 for (let i = 0; i < accordion.length; i++) {
     accordion[i].addEventListener("click", function() {
       this.classList.toggle("active");
-      var panel = this.nextElementSibling;
+      let panel = this.nextElementSibling;
       if (panel.style.display === "block") {
         panel.style.display = "none";
       } else {
@@ -164,7 +164,7 @@ class grid {
     }
 }
 
-let griddy = new grid(7 , 3)
+let griddy = new grid(5 , 3)
 // griddy.levelUp()
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
