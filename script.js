@@ -3,6 +3,7 @@ let cnv = document.getElementById('canvas');
 let ctx = cnv.getContext("2d");
 let accordion = document.getElementsByClassName("accordion");
 
+//description box with information about the rules
 for (let i = 0; i < accordion.length; i++) {
     accordion[i].addEventListener("click", function() {
       this.classList.toggle("active");
@@ -15,7 +16,7 @@ for (let i = 0; i < accordion.length; i++) {
     });
   }
   
-
+//canvas width and height
 cnv.width = 500;
 cnv.height = 500;
 
@@ -38,6 +39,7 @@ class grid {
         this.correctClicked = []
         this.outsideClick = false
     }
+    //increases amount of squares that shows up on grid to be clicked, and resets the previous round data
     levelUp() {
         if (this.correctNum === this.coords.length) {
             this.correctNum = 0
@@ -50,6 +52,7 @@ class grid {
                 this.drawboxes()
                 this.ranBox()
         } 
+        //checks if you lose the game
         if (this.wrongNum >= 3) {
             alert('you lost :(  click ok to restart')
             this.level = 1
@@ -63,12 +66,14 @@ class grid {
                 this.ranBox()
         }
     }
+    //creates 2d array for grid
     array() {
         for (let i = 0; i<this.size; i++) {
             this.columns.push(i)
             this.rows.push(this.columns)
         }   
     }
+    //draws grid
     drawboxes() {
         ctx.clearRect(0,0,cnv.width, cnv.height);
         for (let i = 0; i < this.rows.length; i++) {
@@ -80,6 +85,8 @@ class grid {
         }
         
     }
+    
+    //checks for clicks on the grid
     onPress(event) {
         if(this.clickable === false) return
         let xpos, ypos;
@@ -99,6 +106,8 @@ class grid {
     
     this.correctBox();
     }
+
+    //checks if you click the same correct square twice
     checkRepeat(x,y) {
         this.repeat = false
             for (let j = 0; j < this.coords.length; j++) {
@@ -108,6 +117,8 @@ class grid {
                 }
             }
     }
+
+    //generates new random squares to be clicked
     ranBox() {
         let i = 0
         while (i < this.difficulty) {
@@ -132,6 +143,8 @@ class grid {
           }, 1000)
           levelNum.innerHTML = this.level
     }
+
+    //checks if you have clicked the correct box
     correctBox() {
         let correct = false
         let alrClicked = false
@@ -164,8 +177,7 @@ class grid {
     }
 }
 
-let griddy = new grid(5 , 3)
-// griddy.levelUp()
+let griddy = new grid(7 , 3)
 document.addEventListener('click', (e) => griddy.onPress(e)); 
 griddy.array()
 griddy.drawboxes()
@@ -173,106 +185,3 @@ griddy.ranBox()
 
 
 
-
-
-
-
-
-
-// console.log(rows[1][1])
-// function arrayloop(num) {
-//     let g = []
-//     for (i = 0; i<num; i++) {
-//         g.push(i)
-//     }
-//     console.log(g)
-// }
-
-// arrayloop(5)
-
-
-
-
-
-
-// document.addEventListener("click",onPress);
-
-// function onPress(event){
-//         let xy = [event.clientX, event.clientY]
-//         xy = griddy.pressIndex(xy)
-//         console.log(xy)
-//          }
-
-
-// class grid {
-//     constructor(size, canvasSize) {
-//         this.size = size
-//         this.canvasSize = canvasSize
-//     }
-//     pressIndex(coords){
-//         let x = Math.floor(coords[0]/(this.canvasSize/this.size))
-//         let y = Math.floor(coords[1]/(this.canvasSize/this.size)-1)
-//         let xy = [x,y]
-//         return xy
-//     }
-//     displayDefault() {
-//         for (let i = 0; i < this.size; i++) {
-//             let gridspacing = this.canvasSize/this.size
-//             ctx.beginPath();
-//             ctx.moveTo(i * gridspacing, 0);
-//             ctx.lineTo(i * gridspacing, cnv.height);
-//             ctx.stroke();
-    
-//             ctx.beginPath();
-//             ctx.moveTo(0, i * gridspacing);
-//             ctx.lineTo(cnv.width, i*gridspacing);
-//             ctx.stroke();
-//         }
-//     }
-//     displayRanBox(coords) {
-//         ctx.fillStyle = 'black'
-//         ctx.fillRect(this.canvasSize/this.size * coords[0],this.canvasSize/this.size * coords[1],this.canvasSize/this.size,this.canvasSize/this.size)
-//     }
-// }
-
-// let griddy = new grid(4, cnv.width)
-
-// griddy.displayDefault()
-
-// griddy.displayRanBox()
-
-
-
-
-
-
-
-
-
-
-
-
-// function displayDefault() {
-//     for (let i = 0; i < 10; i++) {
-//         ctx.beginPath();
-//         ctx.moveTo(i * 50, 0);
-//         ctx.lineTo(i * 50, cnv.height);
-//         ctx.stroke();
-
-//         ctx.beginPath();
-//         ctx.moveTo(0, i * 50);
-//         ctx.lineTo(cnv.width, i*50);
-//         ctx.stroke();
-//     }
-// }
-
-// displayDefault()
-
-// document.addEventListener("click",onPress);
-
-
-
-// function onPress(event){
-//     let xy = [event.clientX, event.clientY]
-//     console.log(xy)
-//      }
